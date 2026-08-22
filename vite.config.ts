@@ -242,7 +242,7 @@ export default defineConfig(({ command }) => {
 
   return {
     plugins,
-    base: process.env.GITHUB_PAGES ? "/Portfolio/" : "/",
+    base: process.env.GITHUB_PAGES ? "/sooraj-devops-portfolio/" : "/",
     resolve: {
       alias: {
         "@": path.resolve(import.meta.dirname, "client", "src"),
