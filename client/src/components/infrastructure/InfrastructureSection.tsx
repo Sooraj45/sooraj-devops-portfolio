@@ -4,13 +4,10 @@ import { InfrastructureWorkflow } from "./InfrastructureWorkflow";
 
 const headingLines = ["How I approach", "infrastructure."];
 
-export function InfrastructureSection({ backgroundImage, backgroundOffset }: { backgroundImage: string; backgroundOffset: number }) {
+export function InfrastructureSection() {
   return (
     <section id="infrastructure" className="relative overflow-hidden border-y border-white/8 bg-[#0b1220] py-28">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-[.12]"
-        style={{ backgroundImage: `url(${backgroundImage})`, transform: `translate3d(0, ${backgroundOffset}px, 0)`, willChange: "transform" }}
-      />
+      <div className="grid-texture absolute inset-0 opacity-30" />
       <div className="absolute inset-0 bg-[#0b1220]/70" />
 
       <div className="container relative grid gap-8 md:grid-cols-[.45fr_.55fr] md:gap-10 lg:grid-cols-[.38fr_.62fr] lg:items-center lg:gap-16">

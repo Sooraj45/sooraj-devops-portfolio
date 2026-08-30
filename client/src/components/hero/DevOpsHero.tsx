@@ -9,7 +9,7 @@ import { ScrollIndicator } from "./ScrollIndicator";
 import { TerminalPanel } from "./TerminalPanel";
 import { useParallax } from "./useParallax";
 
-export function DevOpsHero({ heroImage, scrollTo }: { heroImage: string; scrollTo: (id: string) => void }) {
+export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
   const [reduceMotion, setReduceMotion] = useState(false);
   const [booted, setBooted] = useState(false);
   const [scrollT, setScrollT] = useState(0);
@@ -44,7 +44,7 @@ export function DevOpsHero({ heroImage, scrollTo }: { heroImage: string; scrollT
 
   return (
     <div ref={heroRef} className="relative flex min-h-screen w-full flex-col justify-center">
-      <div className="absolute inset-0 bg-cover bg-center opacity-[.22]" style={{ backgroundImage: `url(${heroImage})` }} />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(124,58,237,.16),transparent_28%),radial-gradient(circle_at_80%_40%,rgba(34,211,238,.12),transparent_32%)]" />
       <div
         className="grid-texture absolute inset-0 opacity-30"
         style={reduceMotion ? undefined : { transform: `translate3d(${parallax.x * 3}px, ${parallax.y * 3}px, 0)` }}
@@ -84,8 +84,7 @@ export function DevOpsHero({ heroImage, scrollTo }: { heroImage: string; scrollT
 
             <motion.div className="mt-10 flex items-center gap-5 mono text-[10px] uppercase tracking-[.16em] text-slate-500" {...fadeUp(.86)}>
               <a href="mailto:soorajpoojary45@gmail.com" className="transition hover:text-cyan-300">Email</a>
-              <a href="https://www.linkedin.com" target="_blank" rel="noreferrer" className="transition hover:text-cyan-300">LinkedIn</a>
-              <a href="https://github.com" target="_blank" rel="noreferrer" className="transition hover:text-cyan-300">GitHub</a>
+              <a href="https://github.com/Sooraj45" target="_blank" rel="noreferrer" className="transition hover:text-cyan-300">GitHub</a>
             </motion.div>
           </div>
 

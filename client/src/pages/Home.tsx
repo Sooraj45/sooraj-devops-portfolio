@@ -1,21 +1,17 @@
 // Control Plane Noir: this page treats the portfolio as an evidence-led operations console.
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Check, ChevronRight, Cloud, Code2, Copy, Download, Github, Globe2, LockKeyhole, Mail, Menu, Network, Server, ShieldCheck, Terminal, X, Zap } from "lucide-react";
+import { ArrowUpRight, Check, ChevronRight, Cloud, Code2, Copy, ExternalLink, Github, Globe2, LockKeyhole, Mail, Menu, Network, Server, ShieldCheck, X, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { InfrastructureSection } from "@/components/infrastructure/InfrastructureSection";
 import { DevOpsHero } from "@/components/hero/DevOpsHero";
 
 const base = import.meta.env.BASE_URL;
 const asset = {
-  hero: `${base}manus-storage/control-plane-hero_c8abb376.jpg`,
-  architecture: `${base}manus-storage/infrastructure-architecture_fa1ffc0c.jpg`,
-  texture: `${base}manus-storage/observability-texture_bdf42214.jpg`,
   profile: `${base}manus-storage/soorajImage_cee72ae5.jpg`,
-  resume: `${base}manus-storage/Sooraj_Poojary_Resume_efe1a1d5.pdf`,
 };
 
-const navItems = ["About", "Experience", "Skills", "Infrastructure", "Education", "Contact"];
+const navItems = ["About", "Experience", "Skills", "Projects", "Infrastructure", "Contact"];
 const expertise = [
   ["Cloud Infrastructure", "Cloud infrastructure deployment, configuration and application hosting.", ["AWS EC2", "AWS S3", "Oracle Cloud"], Cloud],
   ["Network & Security", "Network security, firewall configuration, secure connectivity and DNS management.", ["WAF", "Firewall", "VPN", "SonicWall", "CloudFlare"], ShieldCheck],
@@ -40,6 +36,29 @@ const skillGroups: readonly (readonly [string, readonly string[]])[] = [
   ["IT Infrastructure", ["Veeam Backup", "Acronis", "Atera", "Microsoft 365", "Exchange Administration", "Intune", "ManageEngine", "Group Policy", "Active Directory", "Linux Server Administration", "ITSM", "Incident Management"]],
   ["Front-End", ["HTML", "CSS", "JavaScript"]],
 ];
+
+const projects = [
+  {
+    title: "IDSSPL Official Website",
+    description: "A production company website built and deployed with a modern JavaScript stack, responsive layouts and continuous delivery through Vercel.",
+    tags: ["JavaScript", "Vercel", "Responsive UI"],
+    source: "https://github.com/Sooraj45/Idsspl-Website-Official-",
+    live: "https://idsspl-website-official.vercel.app",
+  },
+  {
+    title: "DevOps Portfolio",
+    description: "An infrastructure-inspired portfolio that turns cloud, security and systems experience into an interactive operational narrative.",
+    tags: ["React", "TypeScript", "Vite"],
+    source: "https://github.com/Sooraj45/sooraj-devops-portfolio",
+    live: "https://soorajpoojary.vercel.app",
+  },
+  {
+    title: "Pharmacy Management System",
+    description: "A Django-based dispensing and inventory workflow for managing medicine stock, purchases, issues and pharmacy operations.",
+    tags: ["Django", "Inventory", "Web Application"],
+    source: "https://github.com/Sooraj45/PharmacyManagementSystem",
+  },
+] as const;
 
 const terminalHelp = ["Available commands:", "  help          Show this help", "  whoami        Who is this", "  about         Short summary", "  skills        List core skills", "  experience    Recent roles", "  contact       Get in touch", "  resume        Download resume", "  social        Social links", "  ls            List files", "  clear         Clear the terminal"];
 
@@ -79,8 +98,8 @@ function TerminalCard() {
       case "skills": output = skillGroups.map(([group, list]) => `${group}: ${list.join(", ")}`); break;
       case "experience": output = experience.map(item => `${item.date} — ${item.role} @ ${item.company}`); break;
       case "contact": output = ["Email: soorajpoojary45@gmail.com", "Location: Mumbai, India"]; break;
-      case "resume": output = ["Opening resume..."]; window.open(asset.resume, "_blank"); break;
-      case "social": output = ["LinkedIn: https://www.linkedin.com", "GitHub: https://github.com"]; break;
+      case "resume": output = ["Resume available on request. Email: soorajpoojary45@gmail.com"]; break;
+      case "social": output = ["GitHub: https://github.com/Sooraj45"]; break;
       case "ls": output = ["about.md  experience.log  skills.json  contact.txt  resume.pdf"]; break;
       case "echo": output = [args.join(" ")]; break;
       case "date": output = [new Date().toString()]; break;
@@ -114,27 +133,7 @@ function TerminalCard() {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [architectureOffset, setArchitectureOffset] = useState(0);
   const email = "soorajpoojary45@gmail.com";
-  useEffect(() => {
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) return;
-    let frame = 0;
-    const updateParallax = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const section = document.getElementById("infrastructure");
-        if (!section) return;
-        const rect = section.getBoundingClientRect();
-        const progress = Math.max(-1, Math.min(1, (window.innerHeight / 2 - (rect.top + rect.height / 2)) / (window.innerHeight + rect.height)));
-        setArchitectureOffset(progress * 30);
-      });
-    };
-    updateParallax();
-    window.addEventListener("scroll", updateParallax, { passive: true });
-    window.addEventListener("resize", updateParallax);
-    return () => { cancelAnimationFrame(frame); window.removeEventListener("scroll", updateParallax); window.removeEventListener("resize", updateParallax); };
-  }, []);
   const scrollTo = (id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
   const copyEmail = async () => { await navigator.clipboard?.writeText(email); setCopied(true); toast.success("Email copied to clipboard"); window.setTimeout(() => setCopied(false), 1800); };
   const allSkills = useMemo(() => skillGroups.flatMap(([, list]) => list), []);
@@ -143,7 +142,7 @@ export default function Home() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/8 bg-[#080d17]/80 backdrop-blur-xl"><div className="container flex h-20 items-center justify-between"><a href="#home" className="flex items-center gap-3"><div className="relative hidden h-10 w-10 overflow-hidden rounded-full border border-cyan-300/35 bg-[#e9eef0] shadow-[0_0_22px_rgba(93,228,255,.12)] sm:block"><img src={asset.profile} alt="Sooraj Poojary profile" className="h-full w-full object-cover object-top"/><span className="absolute bottom-0 right-0 h-2 w-2 rounded-full border-2 border-[#080d17] bg-emerald-300"/></div><div><div className="display text-base font-bold tracking-[.26em] text-white">SOORAJ</div><div className="mono text-[9px] tracking-[.2em] text-cyan-300">DEVOPS ENGINEER</div></div></a><nav className="hidden items-center gap-7 lg:flex">{navItems.map(item => <button key={item} onClick={() => scrollTo(item.toLowerCase())} className="mono text-[10px] uppercase tracking-[.14em] text-slate-400 transition-colors hover:text-cyan-300">{item}</button>)}</nav><div className="hidden items-center gap-3 md:flex"><span className="flex items-center gap-2 mono text-[10px] uppercase tracking-[.14em] text-emerald-300"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300"/>Available to connect</span><button onClick={() => scrollTo("contact")} className="rounded-lg border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 mono text-[10px] uppercase tracking-[.12em] text-cyan-200 transition hover:bg-cyan-300/20">Let's Connect <ArrowUpRight className="ml-1 inline h-3 w-3"/></button></div><button aria-label="Toggle menu" className="rounded-lg border border-white/10 p-2 text-slate-300 md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X/> : <Menu/>}</button></div>{menuOpen && <div className="border-t border-white/10 bg-[#0b1220] px-5 py-5 md:hidden">{navItems.map(item => <button key={item} onClick={() => scrollTo(item.toLowerCase())} className="block w-full border-b border-white/8 py-4 text-left mono text-xs uppercase tracking-[.14em] text-slate-300">{item}</button>)}</div>}</header>
 
     <main id="home">
-      <section className="relative overflow-hidden pt-28"><DevOpsHero heroImage={asset.hero} scrollTo={scrollTo}/></section>
+      <section className="relative overflow-hidden pt-28"><DevOpsHero scrollTo={scrollTo}/></section>
 
       <section id="about" className="relative py-28 md:py-36"><div className="container grid gap-14 lg:grid-cols-[.82fr_1.18fr]"><Reveal><SectionHeading kicker="01 / About" title="Engineering infrastructure with security in mind." copy="A practical DevOps and systems profile shaped by cloud infrastructure, administration, secure connectivity, backup operations and application deployment."/><p className="max-w-xl text-base leading-8 text-slate-400">I bring hands-on experience across cloud infrastructure, systems administration and application deployment, with a focus on AWS EC2 and S3, Oracle Cloud, virtualization, network and firewall security, VPN configuration, backup and disaster recovery, and front-end development. My work supports business-critical infrastructure with minimal downtime.</p></Reveal><Reveal delay={.1}><div className="grid gap-3 sm:grid-cols-2">{["Cloud Infrastructure", "Systems Administration", "Application Deployment", "Security & Networking"].map((item, i) => <div key={item} className="glass group rounded-xl p-6 transition hover:-translate-y-1 hover:border-cyan-300/30"><div className="mb-8 flex items-center justify-between"><span className="mono text-[10px] text-slate-500">0{i + 1}</span><ArrowUpRight className="h-4 w-4 text-cyan-300 opacity-50 transition group-hover:opacity-100"/></div><div className="display text-xl font-semibold text-white">{item}</div><div className="mt-3 h-px w-14 bg-cyan-300/50"/></div>)}</div><div className="mt-4"><TerminalCard/></div></Reveal></div></section>
 
@@ -151,9 +150,11 @@ export default function Home() {
 
       <section id="experience" className="py-28 md:py-36"><div className="container"><Reveal><SectionHeading kicker="03 / Experience" title="A career built close to the system." copy="Exact roles and responsibilities from the resume, organized as an operational timeline."/></Reveal><div className="relative max-w-5xl"><div className="absolute left-3 top-0 h-full w-px bg-gradient-to-b from-cyan-300/65 via-violet-300/35 to-transparent md:left-5"/>{experience.map((item, i) => <Reveal key={`${item.company}-${item.role}`} delay={i * .04}><article className="relative mb-10 pl-12 md:pl-16"><div className={`absolute left-0 top-1.5 h-7 w-7 rounded-full border-4 border-[#080d17] ${item.tone === "cyan" ? "bg-cyan-300" : item.tone === "amber" ? "bg-amber-300" : item.tone === "violet" ? "bg-violet-300" : "bg-slate-500"}`}/><div className="glass rounded-2xl p-6 md:p-8"><div className="flex flex-col justify-between gap-3 md:flex-row md:items-start"><div><div className="eyebrow">{item.date}</div><h3 className="display mt-3 text-2xl font-semibold text-white md:text-3xl">{item.role}</h3><div className="mt-1 text-base text-cyan-200">{item.company}</div></div><span className="rounded-full border border-white/10 px-3 py-1 mono text-[10px] uppercase tracking-[.12em] text-slate-500">Role {String(i + 1).padStart(2, "0")}</span></div><ul className="mt-7 grid gap-3 md:grid-cols-2">{item.bullets.map(b => <li key={b} className="flex gap-3 text-sm leading-6 text-slate-400"><Check className="mt-1 h-4 w-4 shrink-0 text-cyan-300"/>{b}</li>)}</ul>{i === 0 && <div className="mt-7 rounded-xl border border-cyan-300/15 bg-cyan-300/[.04] p-4 mono text-[10px] uppercase tracking-[.12em] text-slate-400">GoDaddy DNS <ChevronRight className="mx-1 inline h-3 w-3 text-cyan-300"/> Instra WAF <ChevronRight className="mx-1 inline h-3 w-3 text-cyan-300"/> AWS EC2 <ChevronRight className="mx-1 inline h-3 w-3 text-cyan-300"/> Application</div>}</div></article></Reveal>)}</div></div></section>
 
-      <InfrastructureSection backgroundImage={asset.architecture} backgroundOffset={architectureOffset}/>
+      <InfrastructureSection/>
 
       <section id="skills" className="py-28 md:py-36"><div className="container"><Reveal><SectionHeading kicker="05 / Skills matrix" title="The working vocabulary." copy={`${allSkills.length} technologies and practices listed in the resume, grouped by the systems they support.`}/></Reveal><div className="grid gap-4 lg:grid-cols-2">{skillGroups.map(([group, skills], i) => <Reveal key={group} delay={i * .04}><div className="glass animate-shimmer rounded-2xl p-6"><div className="flex items-center justify-between border-b border-white/10 pb-4"><div><div className="mono text-[9px] uppercase tracking-[.18em] text-slate-600">matrix / {String(i + 1).padStart(2, "0")}</div><h3 className="display mt-1 text-xl font-semibold text-white">{group}</h3></div><span className="mono text-[10px] text-cyan-300">{String(skills.length).padStart(2, "0")} nodes</span></div><div className="mt-5 flex flex-wrap gap-2">{skills.map(skill => <div key={skill} className="group rounded-lg border border-white/10 bg-white/[.025] px-3 py-2 transition hover:border-cyan-300/40 hover:bg-cyan-300/[.06]"><span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-cyan-300/70 transition group-hover:bg-cyan-300"/><span className="text-sm text-slate-300">{skill}</span></div>)}</div></div></Reveal>)}</div></div></section>
+
+      <section id="projects" className="border-y border-white/8 bg-[#0b1220] py-28"><div className="container"><Reveal><SectionHeading kicker="06 / Selected projects" title="Work that ships." copy="A selection of public projects spanning production websites, developer experience and business applications."/></Reveal><div className="grid gap-5 lg:grid-cols-3">{projects.map((project, i) => <Reveal key={project.title} delay={i * .06}><article className="glass group flex h-full flex-col rounded-2xl p-6 transition duration-300 hover:-translate-y-2 hover:border-cyan-300/35"><div className="flex items-center justify-between"><span className="mono text-[10px] uppercase tracking-[.16em] text-cyan-300">Project {String(i + 1).padStart(2, "0")}</span><Code2 className="h-5 w-5 text-slate-500 transition group-hover:text-cyan-300"/></div><h3 className="display mt-8 text-2xl font-semibold text-white">{project.title}</h3><p className="mt-4 flex-1 text-sm leading-7 text-slate-400">{project.description}</p><div className="mt-6 flex flex-wrap gap-2">{project.tags.map(tag => <span key={tag} className="rounded-md border border-white/10 bg-white/[.03] px-2.5 py-1.5 mono text-[9px] text-slate-300">{tag}</span>)}</div><div className="mt-7 flex items-center gap-5 border-t border-white/10 pt-5 mono text-[10px] uppercase tracking-[.12em]"><a href={project.source} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-slate-400 transition hover:text-cyan-300"><Github className="h-4 w-4"/>Source</a>{"live" in project && <a href={project.live} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-slate-400 transition hover:text-cyan-300"><ExternalLink className="h-4 w-4"/>Live</a>}</div></article></Reveal>)}</div></div></section>
 
       <section id="security" className="border-y border-white/8 bg-[#0b1220] py-28"><div className="container grid gap-12 lg:grid-cols-[1fr_.85fr] lg:items-center"><Reveal><div className="eyebrow">06 / Security posture</div><h2 className="display mt-4 max-w-xl text-4xl font-semibold tracking-[-.04em] text-white md:text-6xl">Security is part of the infrastructure.</h2><p className="mt-6 max-w-xl text-lg leading-8 text-slate-400">The resume reflects practical experience across WAF, firewalls, VPN, DNS, endpoint protection and cloud security. This section keeps the claim grounded: secure connectivity and managed controls as part of reliable operations.</p><div className="mt-8 flex flex-wrap gap-2">{["WAF", "Firewall", "VPN", "CloudFlare", "SonicWall", "Sophos", "Kaspersky", "Security Compliance", "Cloud Security", "DNS"].map(tag => <span key={tag} className="rounded-full border border-amber-300/20 bg-amber-300/[.05] px-3 py-2 mono text-[10px] uppercase tracking-[.08em] text-amber-100">{tag}</span>)}</div></Reveal><Reveal delay={.1}><div className="relative mx-auto flex aspect-square max-w-[420px] items-center justify-center rounded-full border border-cyan-300/15 bg-[radial-gradient(circle,rgba(93,228,255,.13),transparent_58%)]"><div className="absolute inset-10 rounded-full border border-dashed border-cyan-300/25"/><div className="absolute inset-20 rounded-full border border-white/10"/><div className="relative flex h-28 w-28 items-center justify-center rounded-3xl border border-cyan-300/40 bg-[#0b1626] text-cyan-300 shadow-[0_0_60px_rgba(93,228,255,.16)]"><LockKeyhole className="h-10 w-10"/></div>{["WAF", "VPN", "DNS", "Firewall"].map((item, i) => <div key={item} className={`absolute rounded-lg border border-white/10 bg-[#121d2f] px-3 py-2 mono text-[10px] text-slate-300 ${["top-8 left-1/2 -translate-x-1/2", "right-3 top-1/2 -translate-y-1/2", "bottom-8 left-1/2 -translate-x-1/2", "left-3 top-1/2 -translate-y-1/2"][i]}`}>{item}</div>)}</div></Reveal></div></section>
 
@@ -163,7 +164,7 @@ export default function Home() {
 
       <section className="border-y border-white/8 bg-[#0b1220] py-24"><div className="container grid gap-10 lg:grid-cols-[1fr_.8fr] lg:items-center"><Reveal><div className="eyebrow">Beyond infrastructure</div><h2 className="display mt-4 text-4xl font-semibold tracking-[-.04em] text-white md:text-5xl">Reliable systems need clear interfaces.</h2><p className="mt-5 max-w-xl text-lg leading-8 text-slate-400">Alongside infrastructure work, I also contribute to front-end development with HTML, CSS and JavaScript for a fintech application.</p><div className="mt-6 flex gap-2">{["HTML", "CSS", "JavaScript"].map(x => <span key={x} className="rounded-md border border-white/10 px-3 py-2 mono text-[10px] text-cyan-200">{x}</span>)}</div></Reveal><Reveal delay={.1}><div className="glass overflow-hidden rounded-2xl"><div className="flex items-center gap-2 border-b border-white/10 px-4 py-3"><span className="h-2 w-2 rounded-full bg-red-300/70"/><span className="h-2 w-2 rounded-full bg-amber-300/70"/><span className="h-2 w-2 rounded-full bg-emerald-300/70"/><span className="ml-auto mono text-[9px] text-slate-500">app-preview.local</span></div><div className="h-48 bg-[radial-gradient(circle_at_70%_30%,rgba(93,228,255,.22),transparent_28%),linear-gradient(135deg,#14263a,#0d1625)] p-6"><div className="h-3 w-24 rounded bg-cyan-300/70"/><div className="mt-5 h-2 w-44 rounded bg-white/20"/><div className="mt-2 h-2 w-32 rounded bg-white/10"/><div className="mt-7 flex gap-3"><div className="h-16 w-20 rounded-lg border border-white/10 bg-white/5"/><div className="h-16 w-20 rounded-lg border border-white/10 bg-white/5"/><div className="h-16 w-20 rounded-lg border border-white/10 bg-white/5"/></div></div></div></Reveal></div></section>
 
-      <section className="py-24"><div className="container"><Reveal><div className="glass relative overflow-hidden rounded-3xl p-8 md:p-14"><div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: `url(${asset.texture})` }}/><div className="relative flex flex-col justify-between gap-10 md:flex-row md:items-end"><div><div className="eyebrow">Resume / detailed record</div><h2 className="display mt-4 max-w-2xl text-4xl font-semibold tracking-[-.04em] text-white md:text-6xl">Want to know more about my experience?</h2><p className="mt-5 max-w-xl text-lg leading-8 text-slate-400">Explore the resume for a detailed overview of professional experience, technical skills and education.</p></div><div className="flex flex-wrap gap-3"><a href={asset.resume} download className="rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#081018] transition hover:bg-cyan-200">Download Resume <Download className="ml-2 inline h-4 w-4"/></a><button onClick={() => scrollTo("contact")} className="rounded-lg border border-white/15 px-5 py-3.5 display text-sm font-semibold text-white">Contact Me</button></div></div></div></Reveal></div></section>
+      <section className="py-24"><div className="container"><Reveal><div className="glass grid-texture relative overflow-hidden rounded-3xl p-8 md:p-14"><div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(93,228,255,.14),transparent_30%)]"/><div className="relative flex flex-col justify-between gap-10 md:flex-row md:items-end"><div><div className="eyebrow">Resume / detailed record</div><h2 className="display mt-4 max-w-2xl text-4xl font-semibold tracking-[-.04em] text-white md:text-6xl">Want the complete career record?</h2><p className="mt-5 max-w-xl text-lg leading-8 text-slate-400">Request my latest resume for a detailed overview of professional experience, technical skills, certifications and education.</p></div><div className="flex flex-wrap gap-3"><a href="mailto:soorajpoojary45@gmail.com?subject=Resume%20request" className="rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#081018] transition hover:bg-cyan-200">Request Resume <Mail className="ml-2 inline h-4 w-4"/></a><button onClick={() => scrollTo("contact")} className="rounded-lg border border-white/15 px-5 py-3.5 display text-sm font-semibold text-white">Contact Me</button></div></div></div></Reveal></div></section>
 
       <section id="contact" className="border-t border-white/8 bg-[#0b1220] py-28"><div className="container grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-start"><Reveal><div className="eyebrow">08 / Contact</div><h2 className="display mt-4 max-w-xl text-5xl font-semibold tracking-[-.05em] text-white md:text-7xl">Let's build something reliable.</h2><p className="mt-6 max-w-md text-lg leading-8 text-slate-400">Open to conversations around DevOps, cloud infrastructure, system administration and technology.</p><div className="mt-10 space-y-4"><button onClick={copyEmail} className="flex items-center gap-3 text-left text-slate-300 transition hover:text-cyan-300"><Mail className="h-5 w-5 text-cyan-300"/>{copied ? "Copied" : email}<Copy className="h-3.5 w-3.5 text-slate-500"/></button><div className="flex items-center gap-3 text-slate-400"><Globe2 className="h-5 w-5 text-cyan-300"/>Mumbai, India</div></div></Reveal><Reveal delay={.1}><form onSubmit={e => { e.preventDefault(); toast.success("Thanks — this form is ready to connect to your preferred email workflow."); }} className="glass rounded-2xl p-6 md:p-8"><div className="grid gap-5 md:grid-cols-2"><label className="space-y-2"><span className="mono text-[10px] uppercase tracking-[.14em] text-slate-500">Name</span><input required className="w-full rounded-lg border border-white/10 bg-white/[.04] px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/50" placeholder="Your name"/></label><label className="space-y-2"><span className="mono text-[10px] uppercase tracking-[.14em] text-slate-500">Email</span><input required type="email" className="w-full rounded-lg border border-white/10 bg-white/[.04] px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/50" placeholder="you@company.com"/></label></div><label className="mt-5 block space-y-2"><span className="mono text-[10px] uppercase tracking-[.14em] text-slate-500">Subject</span><input required className="w-full rounded-lg border border-white/10 bg-white/[.04] px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/50" placeholder="A reliable opportunity"/></label><label className="mt-5 block space-y-2"><span className="mono text-[10px] uppercase tracking-[.14em] text-slate-500">Message</span><textarea required rows={5} className="w-full resize-none rounded-lg border border-white/10 bg-white/[.04] px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/50" placeholder="Tell me a little about the systems or team..."/></label><button type="submit" className="mt-6 rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#081018] transition hover:bg-cyan-200 active:scale-[.98]">Send Message <ArrowUpRight className="ml-2 inline h-4 w-4"/></button></form></Reveal></div></section>
     </main>
