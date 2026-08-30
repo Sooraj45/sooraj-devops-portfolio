@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { backgroundParticles, hudLabels, netEdges, netNodes, secondaryNodes, type NetNode } from "./data";
 
-const toneDot = { cyan: "bg-cyan-300", amber: "bg-amber-300", violet: "bg-violet-300" } as const;
-const toneText = { cyan: "text-cyan-200", amber: "text-amber-200", violet: "text-violet-200" } as const;
-const toneBorder = { cyan: "border-cyan-300/35 hover:border-cyan-300/60", amber: "border-amber-300/35 hover:border-amber-300/60", violet: "border-violet-300/35" } as const;
+const toneDot = { cyan: "bg-violet-300", amber: "bg-amber-300", violet: "bg-violet-300" } as const;
+const toneText = { cyan: "text-violet-200", amber: "text-amber-200", violet: "text-violet-200" } as const;
+const toneBorder = { cyan: "border-violet-300/35 hover:border-violet-300/60", amber: "border-amber-300/35 hover:border-amber-300/60", violet: "border-violet-300/35" } as const;
 
 function findNode(id: string): NetNode {
   return netNodes.find(n => n.id === id)!;
@@ -35,7 +35,7 @@ export function InfrastructureNetwork({ animateIn, enabled }: { animateIn: boole
             <motion.line
               key={`${edge.from}-${edge.to}`}
               x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-              stroke={active ? "#5de4ff" : "rgba(93,228,255,.4)"}
+              stroke={active ? "#a78bfa" : "rgba(167,139,250,.4)"}
               strokeWidth={.6}
               vectorEffect="non-scaling-stroke"
               initial={{ pathLength: 0, opacity: 0 }}
@@ -56,7 +56,7 @@ export function InfrastructureNetwork({ animateIn, enabled }: { animateIn: boole
         return (
           <motion.span
             key={`packet-${edge.from}-${edge.to}`}
-            className="pointer-events-none absolute h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_#5de4ff]"
+            className="pointer-events-none absolute h-[5px] w-[5px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_#a78bfa]"
             initial={{ left: `${from.x}%`, top: `${from.y}%`, opacity: 0 }}
             animate={{ left: [`${from.x}%`, `${to.x}%`], top: [`${from.y}%`, `${to.y}%`], opacity: [0, 1, 1, 0] }}
             transition={{ duration: Math.max(1.4, dist * .045), repeat: Infinity, repeatDelay: .6, delay: 1.1 + i * .3, ease: "linear" }}
@@ -67,7 +67,7 @@ export function InfrastructureNetwork({ animateIn, enabled }: { animateIn: boole
       {backgroundParticles.map((p, i) => (
         <span
           key={i}
-          className="pointer-events-none absolute h-[3px] w-[3px] rounded-full bg-cyan-300/50 animate-signal"
+          className="pointer-events-none absolute h-[3px] w-[3px] rounded-full bg-violet-300/50 animate-signal"
           style={{ left: `${p.x}%`, top: `${p.y}%`, animationDelay: `${p.delay}s` }}
         />
       ))}
@@ -111,7 +111,7 @@ export function InfrastructureNetwork({ animateIn, enabled }: { animateIn: boole
             onHoverStart={() => setHovered(node.id)}
             onHoverEnd={() => setHovered(null)}
           >
-            <div className={`flex items-center gap-2 rounded-lg border bg-[#0b0b0b]/80 px-2.5 py-1.5 backdrop-blur-sm transition-colors duration-300 ${toneBorder[node.tone]} ${isHovered ? "shadow-[0_0_24px_rgba(93,228,255,.2)]" : ""}`}>
+            <div className={`flex items-center gap-2 rounded-lg border bg-[#070707]/80 px-2.5 py-1.5 backdrop-blur-sm transition-colors duration-300 ${toneBorder[node.tone]} ${isHovered ? "shadow-[0_0_24px_rgba(167,139,250,.2)]" : ""}`}>
               <span className={`h-1.5 w-1.5 rounded-full ${toneDot[node.tone]} ${isHovered ? "animate-signal" : "animate-pulse"}`} />
               <div className="leading-tight">
                 <div className="mono text-[10px] tracking-[.14em] text-white">{node.label}</div>

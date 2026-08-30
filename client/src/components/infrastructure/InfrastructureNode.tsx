@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import type { ArchitectureNode } from "./data";
 
 const toneStyles = {
-  cyan: { border: "border-cyan-300/30", bg: "bg-cyan-300/8", text: "text-cyan-200", dot: "bg-cyan-300", glow: "shadow-[0_0_22px_rgba(93,228,255,.22)]", hoverBorder: "hover:border-cyan-300/50" },
+  cyan: { border: "border-violet-300/30", bg: "bg-violet-300/8", text: "text-violet-200", dot: "bg-violet-300", glow: "shadow-[0_0_22px_rgba(167,139,250,.22)]", hoverBorder: "hover:border-violet-300/50" },
   amber: { border: "border-amber-300/30", bg: "bg-amber-300/8", text: "text-amber-200", dot: "bg-amber-300", glow: "shadow-[0_0_22px_rgba(246,201,106,.22)]", hoverBorder: "hover:border-amber-300/50" },
 } as const;
 

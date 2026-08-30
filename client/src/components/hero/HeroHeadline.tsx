@@ -10,8 +10,8 @@ export function HeroHeadline({ start }: { start: boolean }) {
         return (
           <motion.span
             key={line}
-            className={`block ${isLast ? "text-cyan-300" : ""}`}
-            style={isLast ? { textShadow: "0 0 42px rgba(93,228,255,.38)" } : undefined}
+            className={`block ${isLast ? "text-violet-300" : ""}`}
+            style={isLast ? { textShadow: "0 0 42px rgba(167,139,250,.38)" } : undefined}
             initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
             animate={start ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
             transition={{ duration: .82, delay: .12 * i, ease: [.16, 1, .3, 1] }}

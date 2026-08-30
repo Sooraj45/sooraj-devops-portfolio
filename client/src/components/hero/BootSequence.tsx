@@ -26,9 +26,9 @@ export function BootSequence({ onDone, skip }: { onDone: () => void; skip: boole
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
           transition={{ duration: .18 }}
-          className="mono flex items-center gap-2 text-[9px] uppercase tracking-[.16em] text-cyan-300/80"
+          className="mono flex items-center gap-2 text-[9px] uppercase tracking-[.16em] text-violet-300/80"
         >
-          <span className="h-1 w-1 rounded-full bg-cyan-300 animate-signal" />
+          <span className="h-1 w-1 rounded-full bg-violet-300 animate-signal" />
           {bootSequence[i]}
         </motion.div>
       </AnimatePresence>

@@ -17,14 +17,14 @@ export function ArchitectureCard() {
       className="glass relative overflow-hidden rounded-[22px] p-5 md:p-7"
     >
       <div className="pointer-events-none absolute inset-0 grid-texture opacity-25" />
-      <div className="scanline pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-cyan-300/[.06] to-transparent" />
+      <div className="scanline pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-violet-300/[.06] to-transparent" />
 
       <div className="relative mb-7 flex items-center justify-between border-b border-white/8 pb-4">
         <div>
           <div className="eyebrow">Cloud architecture / 2026</div>
           <div className="mt-1 text-sm text-slate-300">Production request path</div>
         </div>
-        <Globe2 className="h-4 w-4 text-cyan-300" />
+        <Globe2 className="h-4 w-4 text-violet-300" />
       </div>
 
       <div className="relative">
