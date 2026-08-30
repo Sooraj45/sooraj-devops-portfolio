@@ -50,7 +50,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
         style={reduceMotion ? undefined : { transform: `translate3d(${parallax.x * 3}px, ${parallax.y * 3}px, 0)` }}
       />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_38%,rgba(93,228,255,.14),transparent_32%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#080d17_22%,rgba(8,13,23,.86)_54%,rgba(8,13,23,.3))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#050505_22%,rgba(5,5,5,.9)_54%,rgba(5,5,5,.35))]" />
 
       {!booted && <BootSequence skip={reduceMotion} onDone={() => setBooted(true)} />}
 
@@ -70,7 +70,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
             <motion.div className="mt-10 flex flex-wrap gap-3" {...fadeUp(.74)}>
               <button
                 onClick={() => scrollTo("experience")}
-                className="group rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#081018] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-200 hover:shadow-[0_0_32px_rgba(93,228,255,.35)] active:scale-[.98]"
+                className="group rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#050505] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-200 hover:shadow-[0_0_32px_rgba(93,228,255,.35)] active:scale-[.98]"
               >
                 View My Experience <ArrowUpRight className="ml-2 inline h-4 w-4 transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
               </button>
@@ -97,7 +97,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
                 transition: "opacity .2s linear",
               }}
             >
-              <div className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-1/3 bg-gradient-to-r from-[#080d17] to-transparent lg:block" />
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-1/3 bg-gradient-to-r from-[#050505] to-transparent lg:block" />
               <motion.div
                 className="relative h-full w-full"
                 initial={{ opacity: 0, scale: .96 }}
@@ -107,7 +107,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
                 <InfrastructureNetwork animateIn={booted} enabled={!reduceMotion} />
               </motion.div>
 
-              <div className="absolute -top-3 right-0 z-20 hidden w-40 rounded-lg border border-white/8 bg-[#0b1421]/70 p-3 backdrop-blur-sm lg:block">
+              <div className="absolute -top-3 right-0 z-20 hidden w-40 rounded-lg border border-white/8 bg-[#0b0b0b]/70 p-3 backdrop-blur-sm lg:block">
                 <LiveMetrics enabled={!reduceMotion} />
               </div>
 

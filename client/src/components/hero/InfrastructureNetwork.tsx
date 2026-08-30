@@ -111,7 +111,7 @@ export function InfrastructureNetwork({ animateIn, enabled }: { animateIn: boole
             onHoverStart={() => setHovered(node.id)}
             onHoverEnd={() => setHovered(null)}
           >
-            <div className={`flex items-center gap-2 rounded-lg border bg-[#0b1421]/80 px-2.5 py-1.5 backdrop-blur-sm transition-colors duration-300 ${toneBorder[node.tone]} ${isHovered ? "shadow-[0_0_24px_rgba(93,228,255,.2)]" : ""}`}>
+            <div className={`flex items-center gap-2 rounded-lg border bg-[#0b0b0b]/80 px-2.5 py-1.5 backdrop-blur-sm transition-colors duration-300 ${toneBorder[node.tone]} ${isHovered ? "shadow-[0_0_24px_rgba(93,228,255,.2)]" : ""}`}>
               <span className={`h-1.5 w-1.5 rounded-full ${toneDot[node.tone]} ${isHovered ? "animate-signal" : "animate-pulse"}`} />
               <div className="leading-tight">
                 <div className="mono text-[10px] tracking-[.14em] text-white">{node.label}</div>
