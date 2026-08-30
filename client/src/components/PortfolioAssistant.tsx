@@ -30,8 +30,8 @@ export function PortfolioAssistant() {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         setEyeOffset({
-          x: (event.clientX / window.innerWidth - 0.5) * 3,
-          y: (event.clientY / window.innerHeight - 0.5) * 3,
+          x: (event.clientX / window.innerWidth - 0.5) * 5,
+          y: (event.clientY / window.innerHeight - 0.5) * 4,
         });
       });
     };
