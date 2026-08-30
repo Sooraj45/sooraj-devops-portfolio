@@ -6,9 +6,9 @@ const headingLines = ["How I approach", "infrastructure."];
 
 export function InfrastructureSection() {
   return (
-    <section id="infrastructure" className="relative overflow-hidden border-y border-white/8 bg-[#050505] py-28">
+    <section id="infrastructure" className="relative overflow-hidden border-y border-white/8 site-alt-surface py-28">
       <div className="grid-texture absolute inset-0 opacity-30" />
-      <div className="absolute inset-0 bg-[#050505]/70" />
+      <div className="site-alt-surface absolute inset-0 opacity-70" />
 
       <div className="container relative grid gap-8 md:grid-cols-[.45fr_.55fr] md:gap-10 lg:grid-cols-[.38fr_.62fr] lg:items-center lg:gap-16">
         <div>

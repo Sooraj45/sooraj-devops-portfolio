@@ -49,7 +49,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
         className="grid-texture absolute inset-0 opacity-30"
         style={reduceMotion ? undefined : { transform: `translate3d(${parallax.x * 3}px, ${parallax.y * 3}px, 0)` }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_38%,rgba(167,139,250,.14),transparent_32%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_38%,rgba(93,228,255,.14),transparent_32%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#000000_22%,rgba(5,5,5,.9)_54%,rgba(5,5,5,.35))]" />
 
       {!booted && <BootSequence skip={reduceMotion} onDone={() => setBooted(true)} />}
@@ -70,21 +70,21 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
             <motion.div className="mt-10 flex flex-wrap gap-3" {...fadeUp(.74)}>
               <button
                 onClick={() => scrollTo("experience")}
-                className="group rounded-lg bg-violet-300 px-5 py-3.5 display text-sm font-semibold text-[#000000] transition duration-300 hover:-translate-y-0.5 hover:bg-violet-200 hover:shadow-[0_0_32px_rgba(167,139,250,.35)] active:scale-[.98]"
+                className="group rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#000000] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-200 hover:shadow-[0_0_32px_rgba(93,228,255,.35)] active:scale-[.98]"
               >
                 View My Experience <ArrowUpRight className="ml-2 inline h-4 w-4 transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
               </button>
               <a
                 href="#contact"
-                className="rounded-lg border border-white/15 bg-white/[.04] px-5 py-3.5 display text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:border-violet-300/40 hover:bg-white/[.08]"
+                className="rounded-lg border border-white/15 bg-white/[.04] px-5 py-3.5 display text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/40 hover:bg-white/[.08]"
               >
                 Let's Connect
               </a>
             </motion.div>
 
             <motion.div className="mt-10 flex items-center gap-5 mono text-[10px] uppercase tracking-[.16em] text-slate-500" {...fadeUp(.86)}>
-              <a href="mailto:soorajpoojary45@gmail.com" className="transition hover:text-violet-300">Email</a>
-              <a href="https://github.com/Sooraj45" target="_blank" rel="noreferrer" className="transition hover:text-violet-300">GitHub</a>
+              <a href="mailto:soorajpoojary45@gmail.com" className="transition hover:text-cyan-300">Email</a>
+              <a href="https://github.com/Sooraj45" target="_blank" rel="noreferrer" className="transition hover:text-cyan-300">GitHub</a>
             </motion.div>
           </div>
 

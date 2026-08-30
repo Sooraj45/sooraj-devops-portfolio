@@ -15,11 +15,11 @@ export function LiveMetrics({ enabled }: { enabled: boolean }) {
     <div className="mono flex flex-col gap-2 text-[9px] uppercase tracking-[.14em] text-slate-400">
       <div className="flex items-center justify-between gap-4">
         <span>Uptime</span>
-        <span className="text-violet-300">99.99%</span>
+        <span className="text-cyan-300">99.99%</span>
       </div>
       <div className="flex items-center justify-between gap-4">
         <span>Latency</span>
-        <span className="text-violet-300">{latency}ms</span>
+        <span className="text-cyan-300">{latency}ms</span>
       </div>
       <div className="flex items-center justify-between gap-4">
         <span>Deploy</span>
