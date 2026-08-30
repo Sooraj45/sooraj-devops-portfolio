@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const lines = ["Building", "secure", "infrastructure", "that performs."];
+const lines = ["Cloud systems.", "Secure delivery.", "Reliable operations."];
 
 export function HeroHeadline({ start }: { start: boolean }) {
   return (

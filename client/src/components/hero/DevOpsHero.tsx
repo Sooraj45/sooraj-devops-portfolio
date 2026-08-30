@@ -64,7 +64,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
             <HeroHeadline start={booted} />
 
             <motion.p className="mt-8 max-w-xl text-lg leading-8 text-slate-300" {...fadeUp(.62)}>
-              DevOps Engineer with hands-on experience across cloud infrastructure, systems administration and application deployment. Skilled in AWS, Oracle Cloud, virtualization, network and firewall security, VPN configuration, backup and disaster recovery, and front-end development.
+              DevOps Engineer focused on dependable cloud infrastructure, secure connectivity and production application delivery across AWS, Oracle Cloud, Linux and Microsoft environments.
             </motion.p>
 
             <motion.div className="mt-10 flex flex-wrap gap-3" {...fadeUp(.74)}>
@@ -72,7 +72,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
                 onClick={() => scrollTo("experience")}
                 className="group rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#000000] transition duration-300 hover:-translate-y-0.5 hover:bg-cyan-200 hover:shadow-[0_0_32px_rgba(93,228,255,.35)] active:scale-[.98]"
               >
-                View My Experience <ArrowUpRight className="ml-2 inline h-4 w-4 transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                Explore My Work <ArrowUpRight className="ml-2 inline h-4 w-4 transition duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
               </button>
               <a
                 href="#contact"

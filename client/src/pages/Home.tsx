@@ -14,6 +14,12 @@ const asset = {
 };
 
 const navItems = ["About", "Experience", "Skills", "Projects", "Infrastructure", "Contact"];
+const professionalSnapshot = [
+  ["3+ years", "Infrastructure operations", "career"],
+  ["5 roles", "Systems & DevOps delivery", "experience"],
+  ["AWS + OCI", "Multi-cloud experience", "cloud"],
+  ["Security first", "WAF · VPN · Firewall", "posture"],
+] as const;
 const expertise = [
   ["Cloud Infrastructure", "Cloud infrastructure deployment, configuration and application hosting.", ["AWS EC2", "AWS S3", "Oracle Cloud"], Cloud],
   ["Network & Security", "Network security, firewall configuration, secure connectivity and DNS management.", ["WAF", "Firewall", "VPN", "SonicWall", "CloudFlare"], ShieldCheck],
@@ -145,6 +151,8 @@ export default function Home() {
 
     <main id="home">
       <section className="relative overflow-hidden pt-28"><DevOpsHero scrollTo={scrollTo}/></section>
+
+      <section className="professional-snapshot border-y border-cyan-300/10" aria-label="Professional overview"><div className="container"><div className="grid md:grid-cols-2 xl:grid-cols-4">{professionalSnapshot.map(([value, label, meta], i) => <Reveal key={label} delay={i * .05}><div className="snapshot-card group"><div className="flex items-center justify-between"><span className="mono text-[9px] uppercase tracking-[.18em] text-slate-600">{meta}</span><span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,.65)]"/></div><div className="display mt-5 text-2xl font-semibold text-white md:text-3xl">{value}</div><div className="mt-2 text-sm text-slate-400">{label}</div><div className="mt-5 h-px w-full overflow-hidden bg-white/8"><div className="h-full w-1/3 bg-gradient-to-r from-cyan-300 to-blue-500 transition-all duration-500 group-hover:w-full"/></div></div></Reveal>)}</div></div></section>
 
       <section id="about" className="relative py-28 md:py-36"><div className="container grid gap-14 lg:grid-cols-[.82fr_1.18fr]"><Reveal><SectionHeading kicker="01 / About" title="Engineering infrastructure with security in mind." copy="A practical DevOps and systems profile shaped by cloud infrastructure, administration, secure connectivity, backup operations and application deployment."/><p className="max-w-xl text-base leading-8 text-slate-400">I bring hands-on experience across cloud infrastructure, systems administration and application deployment, with a focus on AWS EC2 and S3, Oracle Cloud, virtualization, network and firewall security, VPN configuration, backup and disaster recovery, and front-end development. My work supports business-critical infrastructure with minimal downtime.</p></Reveal><Reveal delay={.1}><div className="grid gap-3 sm:grid-cols-2">{["Cloud Infrastructure", "Systems Administration", "Application Deployment", "Security & Networking"].map((item, i) => <div key={item} className="glass group rounded-xl p-6 transition hover:-translate-y-1 hover:border-cyan-300/30"><div className="mb-8 flex items-center justify-between"><span className="mono text-[10px] text-slate-500">0{i + 1}</span><ArrowUpRight className="h-4 w-4 text-cyan-300 opacity-50 transition group-hover:opacity-100"/></div><div className="display text-xl font-semibold text-white">{item}</div><div className="mt-3 h-px w-14 bg-cyan-300/50"/></div>)}</div><div className="mt-4"><TerminalCard/></div></Reveal></div></section>
 
