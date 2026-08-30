@@ -107,6 +107,11 @@ a { color: inherit; text-decoration: none; }
 .light .theme-toggle-thumb-moon { opacity: 0; transform: rotate(50deg) scale(.65); }
 .light .glass { background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(237,248,255,.9)); border-color: rgba(8,145,178,.15); box-shadow: 0 18px 55px rgba(8,145,178,.1), inset 0 1px rgba(255,255,255,.8); }
 .light .professional-snapshot { background: linear-gradient(90deg, rgba(231,245,255,.96), rgba(244,250,255,.96), rgba(231,245,255,.96)); }
+.light .hero-atmosphere { background: radial-gradient(circle at 18% 12%, rgba(14,165,233,.12), transparent 34%), radial-gradient(circle at 82% 38%, rgba(99,102,241,.1), transparent 36%); }
+.light .hero-grid { opacity: .42; }
+.light .hero-glow { background: radial-gradient(circle at 76% 42%, rgba(14,165,233,.16), transparent 34%); }
+.light .hero-shade { background: linear-gradient(90deg, rgba(243,249,255,.98) 22%, rgba(243,249,255,.9) 56%, rgba(243,249,255,.42)); }
+.light .hero-network-fade { background: linear-gradient(90deg, #f3f9ff, transparent); }
 .light .text-white { color: #171124 !important; }
 .light .text-slate-100, .light .text-slate-200 { color: #2f2740 !important; }
 .light .text-slate-300 { color: #514861 !important; }
