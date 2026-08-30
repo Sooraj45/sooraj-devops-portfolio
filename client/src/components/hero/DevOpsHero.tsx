@@ -50,7 +50,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
         style={reduceMotion ? undefined : { transform: `translate3d(${parallax.x * 3}px, ${parallax.y * 3}px, 0)` }}
       />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_38%,rgba(93,228,255,.14),transparent_32%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#000000_22%,rgba(5,5,5,.9)_54%,rgba(5,5,5,.35))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#080d17_22%,rgba(8,13,23,.86)_54%,rgba(8,13,23,.3))]" />
 
       {!booted && <BootSequence skip={reduceMotion} onDone={() => setBooted(true)} />}
 
@@ -97,7 +97,7 @@ export function DevOpsHero({ scrollTo }: { scrollTo: (id: string) => void }) {
                 transition: "opacity .2s linear",
               }}
             >
-              <div className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-1/3 bg-gradient-to-r from-[#000000] to-transparent lg:block" />
+              <div className="pointer-events-none absolute inset-y-0 left-0 z-[1] hidden w-1/3 bg-gradient-to-r from-[#080d17] to-transparent lg:block" />
               <motion.div
                 className="relative h-full w-full"
                 initial={{ opacity: 0, scale: .96 }}
