@@ -126,7 +126,10 @@ a { color: inherit; text-decoration: none; }
 .assistant-avatar { position: relative; flex: 0 0 5.2rem; width: 5.2rem; height: 7.2rem; margin: -2.35rem -.15rem -2.25rem -.75rem; filter: drop-shadow(0 12px 18px rgba(0,55,160,.42)); transform-origin: 50% 82%; animation: assistantRobotFloat 2.75s cubic-bezier(.45,.05,.55,.95) infinite; }
 .assistant-avatar::after { content: ''; position: absolute; z-index: 0; left: 50%; bottom: -.95rem; width: 1.15rem; height: 2.35rem; border-radius: 45% 45% 70% 70%; background: linear-gradient(180deg, rgba(119,244,255,.98) 0%, rgba(16,188,255,.92) 30%, rgba(35,93,255,.62) 62%, transparent 100%); filter: blur(5px); transform: translateX(-50%) scaleX(.72) scaleY(.82); transform-origin: 50% 0; animation: assistantThruster 1.05s ease-in-out infinite; pointer-events: none; }
 .assistant-avatar img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: contain; filter: brightness(1.03) drop-shadow(0 0 4px rgba(64,224,255,.2)); animation: assistantRobotGlow 1.65s ease-in-out infinite; pointer-events: none; }
-.assistant-launcher.is-dragging .assistant-avatar, .assistant-launcher.is-dragging .assistant-avatar::after, .assistant-launcher.is-dragging .assistant-avatar img { animation-play-state: paused; }
+.assistant-eyes-blink { position: absolute; z-index: 2; top: 31%; left: 50%; display: flex; justify-content: space-between; width: 31%; height: 10.5%; transform: translateX(-50%); pointer-events: none; }
+.assistant-eyes-blink i { position: relative; display: block; width: 42%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 58% 28%, #102f50 0%, #06152b 44%, #020914 100%); box-shadow: inset 0 0 .18rem rgba(0,3,12,.95), 0 0 .16rem rgba(47,225,255,.22); }
+.assistant-eyes-blink i::after { content: ''; position: absolute; top: 50%; left: 50%; width: 50%; height: 54%; border-radius: 38%; background: #69e5ff; box-shadow: 0 0 .3rem #35d0ff, 0 0 .65rem rgba(47,182,255,.75), inset 0 0 .18rem #fff; transform: translate(-50%, -50%); transform-origin: center; animation: assistantEyeBlink 5s ease-in-out infinite, assistantEyeGaze 5s ease-in-out infinite; }
+.assistant-launcher.is-dragging .assistant-avatar, .assistant-launcher.is-dragging .assistant-avatar::after, .assistant-launcher.is-dragging .assistant-avatar img, .assistant-launcher.is-dragging .assistant-eyes-blink i { animation-play-state: paused; }
 .assistant-launcher:focus-visible, .assistant-icon-button:focus-visible, .assistant-quick button:focus-visible, .assistant-form input:focus-visible, .assistant-form button:focus-visible { outline: 2px solid #5de4ff; outline-offset: 2px; }
 .assistant-panel { width: min(24rem, calc(100vw - 2.5rem)); overflow: hidden; border-radius: 1.25rem; }
 .assistant-header { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.09); padding: 1rem; }
@@ -175,6 +178,8 @@ a { color: inherit; text-decoration: none; }
 @keyframes assistantRobotFloat { 0%, 100% { transform: translateY(4px); } 50% { transform: translateY(-7px); } }
 @keyframes assistantRobotGlow { 0%, 100% { filter: brightness(1.01) drop-shadow(0 0 3px rgba(64,224,255,.18)); } 50% { filter: brightness(1.09) drop-shadow(0 0 8px rgba(64,224,255,.42)); } }
 @keyframes assistantThruster { 0%, 100% { opacity: .58; transform: translateX(-50%) scaleX(.68) scaleY(.74); } 50% { opacity: 1; transform: translateX(-50%) scaleX(.9) scaleY(1.16); } }
+@keyframes assistantEyeBlink { 0%, 29%, 33%, 76%, 80%, 100% { transform: translate(-50%, -50%) scaleY(1); } 31%, 78% { transform: translate(-50%, -50%) scaleY(.12); } }
+@keyframes assistantEyeGaze { 0%, 17%, 40%, 60%, 84%, 100% { left: 50%; } 24%, 31% { left: calc(50% - 1.5px); } 67%, 74% { left: calc(50% + 1.5px); } }
 .animate-hero-bounce { animation: heroBounce 2.2s ease-in-out infinite; }
 
 .animate-orb { animation: floatOrb 10s ease-in-out infinite; }
