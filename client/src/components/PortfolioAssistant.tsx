@@ -1,8 +1,26 @@
 import { Send, Sparkles, X } from "lucide-react";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import {
+  FormEvent,
+  PointerEvent as ReactPointerEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 type Message = { role: "assistant" | "user"; text: string };
+type Position = { right: number; bottom: number };
+type DragState = {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  grabFromRight: number;
+  grabFromBottom: number;
+  moved: boolean;
+};
+
 const quickQuestions = ["What are Sooraj's skills?", "Show me his experience", "How can I contact him?"];
+const viewportGap = 8;
 
 function answerQuestion(question: string) {
   const q = question.toLowerCase();
@@ -18,32 +36,95 @@ function answerQuestion(question: string) {
 export function PortfolioAssistant() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
-  const [eyeOffset, setEyeOffset] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<Position | null>(null);
+  const [dragging, setDragging] = useState(false);
   const [messages, setMessages] = useState<Message[]>([{ role: "assistant", text: "Hi! I'm Sooraj's free portfolio assistant. Ask me about his skills, experience, projects, or contact details." }]);
+  const shellRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<DragState | null>(null);
+  const ignoreClickRef = useRef(false);
+
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, open]);
+
+  const clampPosition = () => {
+    setPosition(current => {
+      const shell = shellRef.current;
+      if (!current || !shell) return current;
+      const rect = shell.getBoundingClientRect();
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = document.documentElement.clientHeight;
+      const next = {
+        right: Math.min(Math.max(viewportGap, current.right), Math.max(viewportGap, viewportWidth - rect.width - viewportGap)),
+        bottom: Math.min(Math.max(viewportGap, current.bottom), Math.max(viewportGap, viewportHeight - rect.height - viewportGap)),
+      };
+      return next.right === current.right && next.bottom === current.bottom ? current : next;
+    });
+  };
+
+  useLayoutEffect(() => {
+    const frame = requestAnimationFrame(clampPosition);
+    return () => cancelAnimationFrame(frame);
+  }, [open]);
+
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let frame = 0;
-    const followPointer = (event: PointerEvent) => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        setEyeOffset({
-          x: (event.clientX / window.innerWidth - 0.5) * 5,
-          y: (event.clientY / window.innerHeight - 0.5) * 4,
-        });
-      });
-    };
-
-    window.addEventListener("pointermove", followPointer, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("pointermove", followPointer);
-    };
+    window.addEventListener("resize", clampPosition);
+    return () => window.removeEventListener("resize", clampPosition);
   }, []);
+
+  const beginDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (!event.isPrimary || event.button !== 0 || !shellRef.current) return;
+    const rect = shellRef.current.getBoundingClientRect();
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      grabFromRight: rect.right - event.clientX,
+      grabFromBottom: rect.bottom - event.clientY,
+      moved: false,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const moveDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const drag = dragRef.current;
+    const shell = shellRef.current;
+    if (!drag || drag.pointerId !== event.pointerId || !shell) return;
+
+    drag.moved = drag.moved || Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) > 4;
+    if (!drag.moved) return;
+
+    event.preventDefault();
+    setDragging(true);
+    const rect = shell.getBoundingClientRect();
+    const viewportWidth = document.documentElement.clientWidth;
+    const viewportHeight = document.documentElement.clientHeight;
+    const right = viewportWidth - event.clientX - drag.grabFromRight;
+    const bottom = viewportHeight - event.clientY - drag.grabFromBottom;
+    setPosition({
+      right: Math.min(Math.max(viewportGap, right), Math.max(viewportGap, viewportWidth - rect.width - viewportGap)),
+      bottom: Math.min(Math.max(viewportGap, bottom), Math.max(viewportGap, viewportHeight - rect.height - viewportGap)),
+    });
+  };
+
+  const endDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    ignoreClickRef.current = drag.moved;
+    dragRef.current = null;
+    setDragging(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+
+  const toggleAssistant = () => {
+    if (ignoreClickRef.current) {
+      ignoreClickRef.current = false;
+      return;
+    }
+    setOpen(value => !value);
+  };
+
   const ask = (question: string) => { const value = question.trim(); if (!value) return; setMessages(items => [...items, { role: "user", text: value }, { role: "assistant", text: answerQuestion(value) }]); setInput(""); };
   const submit = (event: FormEvent) => { event.preventDefault(); ask(input); };
 
-  return <div className="assistant-shell">{open && <section className="assistant-panel glass" aria-label="Portfolio assistant" aria-live="polite"><header className="assistant-header"><div className="assistant-title"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt="" aria-hidden="true"/><div><div className="flex items-center gap-2 text-cyan-300"><Sparkles className="h-4 w-4"/><span className="mono text-[10px] uppercase tracking-[.16em]">Sooraj AI assistant</span></div><p className="mt-1 text-xs text-slate-500">Instant answers</p></div></div><button onClick={() => setOpen(false)} aria-label="Close assistant" className="assistant-icon-button"><X className="h-4 w-4"/></button></header><div className="assistant-messages">{messages.map((message, index) => <div key={index} className={`assistant-message ${message.role}`}>{message.text}</div>)}<div ref={endRef}/></div><div className="assistant-quick">{quickQuestions.map(question => <button key={question} onClick={() => ask(question)}>{question}</button>)}</div><form onSubmit={submit} className="assistant-form"><input value={input} onChange={event => setInput(event.target.value)} aria-label="Ask the portfolio assistant" placeholder="Ask about Sooraj..."/><button type="submit" aria-label="Send question"><Send className="h-4 w-4"/></button></form></section>}<button className="assistant-launcher" onClick={() => setOpen(value => !value)} aria-expanded={open} aria-label={open ? "Close portfolio assistant" : "Open portfolio assistant"}><span className="assistant-avatar" aria-hidden="true"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt=""/><i className="assistant-avatar-pupil assistant-avatar-pupil-left" style={{ transform: `translate(${eyeOffset.x}px, ${eyeOffset.y}px)` }}/><i className="assistant-avatar-pupil assistant-avatar-pupil-right" style={{ transform: `translate(${eyeOffset.x}px, ${eyeOffset.y}px)` }}/></span><span>Ask Sooraj AI</span></button></div>;
+  return <div ref={shellRef} className="assistant-shell" style={position ?? undefined}>{open && <section className="assistant-panel glass" aria-label="Portfolio assistant" aria-live="polite"><header className="assistant-header"><div className="assistant-title"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt="" aria-hidden="true"/><div><div className="flex items-center gap-2 text-cyan-300"><Sparkles className="h-4 w-4"/><span className="mono text-[10px] uppercase tracking-[.16em]">Sooraj AI assistant</span></div><p className="mt-1 text-xs text-slate-500">Instant answers</p></div></div><button onClick={() => setOpen(false)} aria-label="Close assistant" className="assistant-icon-button"><X className="h-4 w-4"/></button></header><div className="assistant-messages">{messages.map((message, index) => <div key={index} className={`assistant-message ${message.role}`}>{message.text}</div>)}<div ref={endRef}/></div><div className="assistant-quick">{quickQuestions.map(question => <button key={question} onClick={() => ask(question)}>{question}</button>)}</div><form onSubmit={submit} className="assistant-form"><input value={input} onChange={event => setInput(event.target.value)} aria-label="Ask the portfolio assistant" placeholder="Ask about Sooraj..."/><button type="submit" aria-label="Send question"><Send className="h-4 w-4"/></button></form></section>}<button className={`assistant-launcher${dragging ? " is-dragging" : ""}`} onClick={toggleAssistant} onPointerDown={beginDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} aria-expanded={open} aria-label={`${open ? "Close" : "Open"} portfolio assistant; drag to move`} title="Drag to move • Click to chat"><span className="assistant-avatar" aria-hidden="true"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt="" draggable={false}/><span className="assistant-eyes-blink"><i/><i/></span></span><span>Ask Sooraj AI</span></button></div>;
 }
