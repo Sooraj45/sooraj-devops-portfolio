@@ -1,5 +1,5 @@
 // Control Plane Noir: this page treats the portfolio as an evidence-led operations console.
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Check, ChevronRight, Cloud, Code2, Copy, ExternalLink, Github, Globe2, LockKeyhole, Mail, Menu, Network, Server, ShieldCheck, X, Zap } from "lucide-react";
 import { toast } from "sonner";
@@ -254,12 +254,8 @@ function TerminalCard() {
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [sending, setSending] = useState(false);
   const email = "soorajpoojary45@gmail.com";
-  useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("sent") !== "true") return;
-    toast.success("Message sent successfully. Thank you!");
-    window.history.replaceState({}, "", `${window.location.pathname}#contact`);
-  }, []);
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
@@ -269,6 +265,32 @@ export default function Home() {
     setCopied(true);
     toast.success("Email copied to clipboard");
     window.setTimeout(() => setCopied(false), 1800);
+  };
+  const submitContact = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+    if (!accessKey) {
+      toast.error(`Contact form setup is incomplete. Please email ${email} directly.`);
+      return;
+    }
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    data.set("access_key", accessKey);
+    data.set("from_name", "Sooraj DevOps Portfolio");
+    setSending(true);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", { method: "POST", body: data });
+      const result = await response.json() as { success?: boolean; message?: string };
+      if (!response.ok || !result.success) throw new Error(result.message || "Unable to send message");
+      form.reset();
+      toast.success("Message sent successfully. Thank you!");
+    } catch {
+      toast.error("Message could not be sent. Please try again or email Sooraj directly.");
+    } finally {
+      setSending(false);
+    }
   };
   const allSkills = useMemo(() => skillGroups.flatMap(([, list]) => list), []);
 
@@ -719,11 +741,8 @@ export default function Home() {
               </div>
             </Reveal>
             <Reveal delay={0.1}>
-              <form action="https://formsubmit.co/soorajpoojary45@gmail.com" method="POST" className="glass rounded-2xl p-6 md:p-8">
-                <input type="hidden" name="_subject" value="New portfolio contact" />
-                <input type="hidden" name="_next" value="https://soorajpoojary.vercel.app/?sent=true#contact" />
-                <input type="hidden" name="_template" value="table" />
-                <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
+              <form onSubmit={submitContact} className="glass rounded-2xl p-6 md:p-8" aria-busy={sending}>
+                <input type="checkbox" name="botcheck" className="hidden" tabIndex={-1} autoComplete="off" />
                 <div className="grid gap-5 md:grid-cols-2">
                   <label className="space-y-2">
                     <span className="mono text-[10px] uppercase tracking-[.14em] text-slate-500">Name</span>
@@ -742,8 +761,8 @@ export default function Home() {
                   <span className="mono text-[10px] uppercase tracking-[.14em] text-slate-500">Message</span>
                   <textarea required name="message" rows={5} className="w-full resize-none rounded-lg border border-white/10 bg-white/[.04] px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-300/50" placeholder="Tell me a little about the systems or team..." />
                 </label>
-                <button type="submit" className="mt-6 rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#000000] transition hover:bg-cyan-200 active:scale-[.98]">
-                  Send Message <ArrowUpRight className="ml-2 inline h-4 w-4" />
+                <button type="submit" disabled={sending} className="mt-6 rounded-lg bg-cyan-300 px-5 py-3.5 display text-sm font-semibold text-[#000000] transition hover:bg-cyan-200 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-60">
+                  {sending ? "Sending..." : "Send Message"} <ArrowUpRight className="ml-2 inline h-4 w-4" />
                 </button>
               </form>
             </Reveal>
