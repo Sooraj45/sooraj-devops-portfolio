@@ -120,13 +120,13 @@ a { color: inherit; text-decoration: none; }
 .light .border-white\/8, .light .border-white\/10, .light .border-white\/15 { border-color: rgba(76,29,149,.14) !important; }
 
 .assistant-shell { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: .75rem; }
-.assistant-launcher { display: flex; align-items: center; gap: .55rem; border: 0; border-radius: 999px; background: transparent; color: #5de4ff; padding: .78rem 1rem; font: 600 .72rem/1 'Space Grotesk', sans-serif; text-shadow: 0 2px 12px rgba(0,0,0,.85); filter: drop-shadow(0 10px 18px rgba(0,0,0,.48)); transition: transform .2s ease, filter .2s ease; }
+.assistant-launcher { display: flex; align-items: center; gap: .55rem; border: 0; border-radius: 999px; background: transparent; color: #5de4ff; padding: .78rem 1rem; font: 600 .72rem/1 'Space Grotesk', sans-serif; text-shadow: 0 2px 12px rgba(0,0,0,.85); filter: drop-shadow(0 10px 18px rgba(0,0,0,.48)); cursor: grab; touch-action: none; user-select: none; transition: transform .2s ease, filter .2s ease; }
 .assistant-launcher:hover { transform: translateY(-2px); filter: drop-shadow(0 12px 22px rgba(0,0,0,.58)); }
+.assistant-launcher.is-dragging, .assistant-launcher.is-dragging:hover { cursor: grabbing; transform: scale(.98); filter: drop-shadow(0 8px 16px rgba(0,0,0,.5)); }
 .assistant-avatar { position: relative; flex: 0 0 3.8rem; width: 3.8rem; height: 4.4rem; margin: -1.05rem .05rem -1.05rem -.55rem; filter: drop-shadow(0 8px 12px rgba(0,55,160,.38)); transform-origin: 50% 85%; animation: assistantRobotHello 3.4s ease-in-out infinite; }
-.assistant-avatar img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.assistant-avatar-pupil { position: absolute; top: 31.4%; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; border-radius: 50%; background: #020617; box-shadow: 0 0 0 1px rgba(255,255,255,.65); pointer-events: none; will-change: transform; transition: transform 70ms linear; }
-.assistant-avatar-pupil-left { left: 49.8%; }
-.assistant-avatar-pupil-right { left: 67.8%; }
+.assistant-avatar::after { content: ''; position: absolute; z-index: 0; left: 50%; bottom: -.1rem; width: 1.35rem; height: .8rem; border-radius: 50%; background: radial-gradient(ellipse, rgba(71,221,255,.92) 0%, rgba(0,174,255,.45) 38%, transparent 72%); filter: blur(4px); transform: translateX(-50%); animation: assistantThruster 1.8s ease-in-out infinite; pointer-events: none; }
+.assistant-avatar img { position: relative; z-index: 1; display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.assistant-launcher.is-dragging .assistant-avatar, .assistant-launcher.is-dragging .assistant-avatar::after { animation-play-state: paused; }
 .assistant-launcher:focus-visible, .assistant-icon-button:focus-visible, .assistant-quick button:focus-visible, .assistant-form input:focus-visible, .assistant-form button:focus-visible { outline: 2px solid #5de4ff; outline-offset: 2px; }
 .assistant-panel { width: min(24rem, calc(100vw - 2.5rem)); overflow: hidden; border-radius: 1.25rem; }
 .assistant-header { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.09); padding: 1rem; }
@@ -173,6 +173,7 @@ a { color: inherit; text-decoration: none; }
 
 @keyframes heroBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
 @keyframes assistantRobotHello { 0%, 100% { transform: translateY(0) rotate(0); } 35% { transform: translateY(-5px) rotate(0); } 44% { transform: translateY(-5px) rotate(-3deg); } 53% { transform: translateY(-5px) rotate(3deg); } 62% { transform: translateY(-5px) rotate(0); } }
+@keyframes assistantThruster { 0%, 100% { opacity: .58; transform: translateX(-50%) scale(.85); } 50% { opacity: 1; transform: translateX(-50%) scale(1.15); } }
 .animate-hero-bounce { animation: heroBounce 2.2s ease-in-out infinite; }
 
 .animate-orb { animation: floatOrb 10s ease-in-out infinite; }
