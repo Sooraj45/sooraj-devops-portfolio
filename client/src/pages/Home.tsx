@@ -304,7 +304,7 @@ export default function Home() {
               <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full border-2 border-[#000000] bg-emerald-300" />
             </div>
             <div>
-              <div className="display text-base font-bold tracking-[.26em] text-white">SOORAJ</div>
+              <div className="display whitespace-nowrap text-sm font-bold tracking-[.14em] text-white sm:text-base sm:tracking-[.18em]">SOORAJ POOJARY</div>
               <div className="mono text-[9px] tracking-[.2em] text-cyan-300">DEVOPS ENGINEER</div>
             </div>
           </a>
