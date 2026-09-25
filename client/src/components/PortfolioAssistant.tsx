@@ -22,6 +22,21 @@ type DragState = {
 const quickQuestions = ["What are Sooraj's skills?", "Show me his experience", "How can I contact him?"];
 const viewportGap = 8;
 
+function greetingFor(date: Date) {
+  const hour = date.getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
+
+function formatLiveTime(date: Date) {
+  return new Intl.DateTimeFormat("en-IN", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
+}
+
 function answerQuestion(question: string) {
   const q = question.toLowerCase();
   if (/skill|technology|tech|aws|cloud/.test(q)) return "Sooraj works across AWS EC2 and S3, Oracle Cloud, Linux, Hyper-V, Microsoft 365, Active Directory, networking, VPN, WAF, backup, monitoring, and front-end development.";
@@ -38,13 +53,19 @@ export function PortfolioAssistant() {
   const [input, setInput] = useState("");
   const [position, setPosition] = useState<Position | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([{ role: "assistant", text: "Hi! I'm Sooraj's free portfolio assistant. Ask me about his skills, experience, projects, or contact details." }]);
+  const [now, setNow] = useState(() => new Date());
+  const [messages, setMessages] = useState<Message[]>([]);
   const shellRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<DragState | null>(null);
   const ignoreClickRef = useRef(false);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, open]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 15_000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const clampPosition = () => {
     setPosition(current => {
@@ -126,5 +147,5 @@ export function PortfolioAssistant() {
   const ask = (question: string) => { const value = question.trim(); if (!value) return; setMessages(items => [...items, { role: "user", text: value }, { role: "assistant", text: answerQuestion(value) }]); setInput(""); };
   const submit = (event: FormEvent) => { event.preventDefault(); ask(input); };
 
-  return <div ref={shellRef} className="assistant-shell" style={position ?? undefined}>{open && <section className="assistant-panel glass" aria-label="Portfolio assistant" aria-live="polite"><header className="assistant-header"><div className="assistant-title"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt="" aria-hidden="true"/><div><div className="flex items-center gap-2 text-cyan-300"><Sparkles className="h-4 w-4"/><span className="mono text-[10px] uppercase tracking-[.16em]">Sooraj AI assistant</span></div><p className="mt-1 text-xs text-slate-500">Instant answers</p></div></div><button onClick={() => setOpen(false)} aria-label="Close assistant" className="assistant-icon-button"><X className="h-4 w-4"/></button></header><div className="assistant-messages">{messages.map((message, index) => <div key={index} className={`assistant-message ${message.role}`}>{message.text}</div>)}<div ref={endRef}/></div><div className="assistant-quick">{quickQuestions.map(question => <button key={question} onClick={() => ask(question)}>{question}</button>)}</div><form onSubmit={submit} className="assistant-form"><input value={input} onChange={event => setInput(event.target.value)} aria-label="Ask the portfolio assistant" placeholder="Ask about Sooraj..."/><button type="submit" aria-label="Send question"><Send className="h-4 w-4"/></button></form></section>}<button className={`assistant-launcher${dragging ? " is-dragging" : ""}`} onClick={toggleAssistant} onPointerDown={beginDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} aria-expanded={open} aria-label={`${open ? "Close" : "Open"} portfolio assistant; drag to move`} title="Drag to move • Click to chat"><span className="assistant-avatar" aria-hidden="true"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt="" draggable={false}/><span className="assistant-eyes-blink"><i/><i/></span></span><span>Ask Sooraj AI</span></button></div>;
+  return <div ref={shellRef} className="assistant-shell" style={position ?? undefined}>{open && <section className="assistant-panel glass" aria-label="Portfolio assistant" aria-live="polite"><header className="assistant-header"><div className="assistant-title"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt="" aria-hidden="true"/><div><div className="flex items-center gap-2 text-cyan-300"><Sparkles className="h-4 w-4"/><span className="mono text-[10px] uppercase tracking-[.16em]">Sooraj AI assistant</span></div><p className="mt-1 text-xs text-slate-500">Instant answers</p></div></div><button onClick={() => setOpen(false)} aria-label="Close assistant" className="assistant-icon-button"><X className="h-4 w-4"/></button></header><div className="assistant-messages"><div className="assistant-live-card"><strong>{greetingFor(now)}</strong><p>Welcome to Sooraj's portfolio. How can I help?</p><time dateTime={now.toISOString()}><span aria-hidden="true"/>{formatLiveTime(now)}</time></div>{messages.map((message, index) => <div key={index} className={`assistant-message ${message.role}`}>{message.text}</div>)}<div ref={endRef}/></div><div className="assistant-quick">{quickQuestions.map(question => <button key={question} onClick={() => ask(question)}>{question}</button>)}</div><form onSubmit={submit} className="assistant-form"><input value={input} onChange={event => setInput(event.target.value)} aria-label="Ask the portfolio assistant" placeholder="Ask about Sooraj..."/><button type="submit" aria-label="Send question"><Send className="h-4 w-4"/></button></form></section>}{!open && <aside className="assistant-live-card assistant-live-teaser" aria-label="Live portfolio assistant greeting"><strong>{greetingFor(now)}</strong><p>Welcome to Sooraj's portfolio. How can I help?</p><time dateTime={now.toISOString()}><span aria-hidden="true"/>{formatLiveTime(now)}</time></aside>}<button className={`assistant-launcher${dragging ? " is-dragging" : ""}`} onClick={toggleAssistant} onPointerDown={beginDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag} aria-expanded={open} aria-label={`${open ? "Close" : "Open"} portfolio assistant; drag to move`} title="Drag to move • Click to chat"><span className="assistant-avatar" aria-hidden="true"><img src={`${import.meta.env.BASE_URL}chatbot-robot-v2.png`} alt="" draggable={false}/><span className="assistant-eyes-blink"><i/><i/></span></span><span>Ask Sooraj AI</span></button></div>;
 }
