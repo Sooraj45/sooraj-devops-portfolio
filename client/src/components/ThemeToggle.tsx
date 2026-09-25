@@ -2,23 +2,34 @@ import { MoonStar, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme === "dark";
+  const { theme, setTheme } = useTheme();
 
   return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={isDark}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
-      title={`Switch to ${isDark ? "light" : "dark"} theme`}
+    <div
+      role="group"
+      aria-label="Choose color theme"
       className="theme-toggle"
-      onClick={toggleTheme}
     >
-      <span className="theme-toggle-thumb" aria-hidden="true">
-        <span className="theme-toggle-thumb-icon theme-toggle-thumb-sun"><Sun size={17}/></span>
-        <span className="theme-toggle-thumb-icon theme-toggle-thumb-moon"><MoonStar size={17}/></span>
-      </span>
-    </button>
+      <button
+        type="button"
+        aria-pressed={theme === "light"}
+        className={`theme-toggle-option${theme === "light" ? " is-active" : ""}`}
+        onClick={() => setTheme?.("light")}
+        title="Use light theme"
+      >
+        <Sun size={14}/>
+        <span>Light</span>
+      </button>
+      <button
+        type="button"
+        aria-pressed={theme === "dark"}
+        className={`theme-toggle-option${theme === "dark" ? " is-active" : ""}`}
+        onClick={() => setTheme?.("dark")}
+        title="Use dark theme"
+      >
+        <MoonStar size={14}/>
+        <span>Dark</span>
+      </button>
+    </div>
   );
 }
